@@ -40,7 +40,6 @@
         zone: "{{ domain_name }}"
         record: "{{ item }}.{{ domain_name }}"
         ttl: 1
-        value: "{{ item.instances[0].private_ip_address }}"
       loop: "{{ instances }}"
       when: action == "delete"
 
