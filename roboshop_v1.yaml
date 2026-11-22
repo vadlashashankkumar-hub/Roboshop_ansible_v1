@@ -1,0 +1,22 @@
+- name: Creating EC2 instances and route53 records
+  hosts: local
+  connection: local
+  vars:
+    instances: ["mongodb", "redis", "mysql", "rabbitmq"]
+    action: create
+    domain_name: devopspractice.store
+    ami_id: ami-0055977a6e828a4f4
+  tasks:
+    - name: Create Ec2 instances
+      amazon.aws.ec2_instance:
+       name: "roboshop-{{ item }}"
+       instance_type: t3.micro
+       state: present
+       image_id: "{{ ami_id }}"
+       region: us-east-1
+       security_groups:
+        - roboshop-common
+        - "roboshop-{{ item }}"
+      loop: "{{ instances }}"
+      when: action == "create"
+      
