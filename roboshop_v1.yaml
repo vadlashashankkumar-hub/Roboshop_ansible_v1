@@ -32,3 +32,25 @@
         overwrite: true
       loop: "{{ ec2_output.results }}"
       when: action == "create"
+
+    - name: Deleting the route53 records
+      amazon.aws.route53:
+        state: absent
+        type: A
+        zone: "{{ domain_name }}"
+        record: "{{ item }}.{{ domain_name }}"
+        ttl: 1
+        value: "{{ item.instances[0].private_ip_address }}"
+      loop: "{{ instances }}"
+      when: action == "delete"
+
+    - name: Deleting Ec2 instances
+      amazon.aws.ec2_instance:
+       name: "roboshop-{{ item }}"
+       instance_type: t3.micro
+       state: absent
+       image_id: "{{ ami_id }}"
+       region: us-east-1
+       wait: false
+      loop: "{{ instances }}"
+      when: action == "delete"
