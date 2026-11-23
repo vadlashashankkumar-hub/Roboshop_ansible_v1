@@ -17,7 +17,7 @@
 
     - name: Enable and start rabbitmq
       service:
-       name: rabbitmq
+       name: rabbitmq-server
        state: started
        enabled: yes
 
