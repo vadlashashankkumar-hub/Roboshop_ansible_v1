@@ -17,11 +17,11 @@
        state: started
        enabled: yes
 
-    # - name: Setting root password
-    #   ansible.mysql.mysql_user:
-    #    name: root
-    #    host: localhost
-    #    password: "{{ mysql_root_password }}"
-    #    check_implicit_admin: true
-    #    state: present
+    - name: Setting root password
+      ansible.mysql.mysql_user:
+       name: root
+       host: localhost
+       password: "{{ mysql_root_password }}"
+       check_implicit_admin: true
+       state: present
    
