@@ -2,7 +2,7 @@
   hosts: redis
   become: yes
 
-  Tasks:
+  tasks:
     - name: Enable redis 7
       command: dnf module enable redis:7 -y
 
