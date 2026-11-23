@@ -1,0 +1,10 @@
+- name: Installing mongodb service
+  hosts: mongodb
+  become: yes
+
+  tasks:
+    - name: copy the mongo.repo file
+      copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
+        
