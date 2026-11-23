@@ -23,7 +23,7 @@
         regexp: '^#?protected-mode yes'
         line: 'protected-mode no'
         
-    - name: Enable and start mongodb
+    - name: Enable and start redis
       service:
        name: redis
        state: started
