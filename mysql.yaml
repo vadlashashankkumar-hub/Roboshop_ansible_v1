@@ -1,0 +1,24 @@
+- name: configure mysql service
+  hosts: redis
+  become: yes
+
+  tasks:
+    - name: Enable mysql 8.4
+      command: dnf module enable mysql:8.4 -y
+
+    - name: install mysql
+      package:
+       name: mysql-server
+       state: present
+
+    - name: Enable and start mysqld
+      service:
+       name: mysqld
+       state: started
+       enabled: yes
+
+    - name: Setting root password
+      user:
+       name: root
+       password: RoboShop@1
+   
