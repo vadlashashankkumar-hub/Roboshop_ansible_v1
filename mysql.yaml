@@ -18,7 +18,10 @@
        enabled: yes
 
     - name: Setting root password
-      user:
+      ansible.mysql.mysql_user:
        name: root
-       password: RoboShop@1
+       host: localhost
+       password: "{{ mysql_root_password }}"
+       check_implicit_admin: true
+       state: present
    
