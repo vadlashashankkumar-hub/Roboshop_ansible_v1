@@ -1,4 +1,4 @@
-- name: Installing mongodb service
+- name: configure mongodb service
   hosts: mongodb
   become: yes
 
@@ -10,13 +10,14 @@
 
     - name: install mongodb server
       package:
-      name: mongodb-org
-      state: present 
+       name: mongodb-org
+       state: present 
 
     - name: Enable and start mongodb
-      name: mongod
-      state: started
-      enabled: yes
+      service:
+       name: mongod
+       state: started
+       enabled: yes
     
     - name: allow remote connections
       replace:
@@ -25,6 +26,7 @@
         replace: '0.0.0.0'
 
     - name: Restart mongodb
-      name: mongod
-      state: restarted
+      service:
+       name: mongod
+       state: restarted
      
