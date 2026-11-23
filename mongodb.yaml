@@ -7,4 +7,24 @@
       copy:
         src: mongo.repo
         dest: /etc/yum.repos.d/mongo.repo
-        
+
+    - name: install mongodb server
+      package:
+      name: mongodb-org
+      state: present 
+
+    - name: Enable and start mongodb
+      name: mongod
+      state: started
+      enabled: yes
+    
+    - name: allow remote connections
+      replace:
+        path: /etc/mongod.conf
+        regexp: '127.0.0.1'
+        replace: '0.0.0.0'
+
+    - name: Restart mongodb
+      name: mongod
+      state: restarted
+     
