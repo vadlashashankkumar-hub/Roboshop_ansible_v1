@@ -20,3 +20,13 @@
     - name: print the version
       debug: 
        msg: "{{ nodejs_version }}"
+
+    - name: Create sysytem user
+      user: 
+        name: roboshop
+        create_home: false
+        home: /app
+        system: true
+        shell: /sbin/nologin
+        comment: "roboshop system user"
+        
