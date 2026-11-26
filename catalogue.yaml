@@ -29,4 +29,70 @@
         system: true
         shell: /sbin/nologin
         comment: "roboshop system user"
-        
+
+    - name: removing the existing app directory
+      file:
+        path: /app
+        state: absent
+
+    - name: removing catalogue.zip
+      file:
+        path: /tmp/catalogue.zip
+        state: absent
+
+    - name: removing the existing app directory
+      file:
+        path: /app
+        state: directory   
+
+    - name: download the application
+      get_url:
+      url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip
+      dest: /tmp/catalogue.zip
+
+    - name: Unzipping the file
+      ansible.builtin.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      remote_src: yes
+
+    - name: Installing the dependencies
+      community.general.npm:
+       path: /app
+
+    - name: copy catalogue service
+      template:
+        src: catalogue.servce.j2
+        dest: /etc/systemd/system/catalogue.service
+
+    - name: copy mongo repo
+      copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
+
+    - name: Install mongodb client
+      dnf:
+        name: mongodb-mongosh
+        state: present
+
+    - name : check whether products data is already loaded
+      command: mongosh --host <MONGODB-SERVER-IPADDRESS> --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()'
+      register: products_count
+
+    - name: print the product_count
+      debug:
+        msg: "{{ products_count_}}"
+
+    - name: Load the data
+      shell: mongosh --host <MONGODB-SERVER-IPADDRESS> </app/db/master-data.js
+      when: products_count.stdout | int == 0
+
+    - name: daemon reload
+      systemd_service:
+      daemon_reload: true
+
+    - name: start and enable catalogue
+      service:
+      name: catalogue
+      state: restarted
+      enabled: yes

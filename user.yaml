@@ -1,0 +1,76 @@
+- name: configure user server
+  hosts: user
+  become: yes
+  tasks:
+    - name: disable nodejs
+      command: dnf module disable nodejs -y
+
+    - name: Enable nodejs:24
+      command: dnf module enable nodejs:24 -y
+
+    - name: install nodejs
+      package:
+       name: nodejs
+       state: present 
+ 
+    - name: Verify nodejs version
+      command: node -v
+      register: nodejs_version
+
+    - name: print the version
+      debug: 
+       msg: "{{ nodejs_version }}"
+
+    - name: Create sysytem user
+      user: 
+        name: roboshop
+        create_home: false
+        home: /app
+        system: true
+        shell: /sbin/nologin
+        comment: "roboshop system user"
+
+    - name: removing the existing app directory
+      file:
+        path: /app
+        state: absent
+
+    - name: removing user.zip
+      file:
+        path: /tmp/user.zip
+        state: absent
+
+    - name: removing the existing app directory
+      file:
+        path: /app
+        state: directory   
+
+    - name: download the application
+      get_url:
+      url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/user-v4.zip
+      dest: /tmp/user.zip
+
+    - name: Unzipping the file
+      ansible.builtin.unarchive:
+      src: /tmp/user.zip
+      dest: /app
+      remote_src: yes
+
+    - name: Installing the dependencies
+      community.general.npm:
+       path: /app
+
+    - name: copy user service
+      template:
+        src: user.servce.j2
+        dest: /etc/systemd/system/user.service
+
+    - name: daemon reload
+      systemd_service:
+      daemon_reload: true
+
+    - name: start and enable user
+      service:
+      name: user
+      state: restarted
+      enabled: yes
