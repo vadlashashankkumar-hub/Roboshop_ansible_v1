@@ -47,8 +47,8 @@
 
     - name: download the application
       get_url:
-       url: https://raw.githubcartcontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/cart-v4.zip
-       dest: /tmp/cart.zip
+        url: https://raw.githubcartcontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/cart-v4.zip
+        dest: /tmp/cart.zip
 
     - name: Unzipping the file
       ansible.builtin.unarchive:
