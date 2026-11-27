@@ -47,14 +47,14 @@
 
     - name: download the application
       get_url:
-      url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/user-v4.zip
-      dest: /tmp/user.zip
+        url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/user-v4.zip
+        dest: /tmp/user.zip
 
     - name: Unzipping the file
       ansible.builtin.unarchive:
-      src: /tmp/user.zip
-      dest: /app
-      remote_src: yes
+       src: /tmp/user.zip
+       dest: /app
+       remote_src: yes
 
     - name: Installing the dependencies
       community.general.npm:
@@ -62,15 +62,15 @@
 
     - name: copy user service
       template:
-        src: user.servce.j2
+        src: user.service.j2
         dest: /etc/systemd/system/user.service
 
     - name: daemon reload
       systemd_service:
-      daemon_reload: true
+       daemon_reload: true
 
     - name: start and enable user
       service:
-      name: user
-      state: restarted
-      enabled: yes
+       name: user
+       state: restarted
+       enabled: yes
