@@ -89,10 +89,10 @@
 
     - name: daemon reload
       systemd_service:
-      daemon_reload: true
+        daemon_reload: true
 
     - name: start and enable catalogue
       service:
-      name: catalogue
-      state: restarted
-      enabled: yes
+        name: catalogue
+        state: restarted
+        enabled: yes
