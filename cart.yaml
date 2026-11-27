@@ -62,7 +62,7 @@
 
     - name: copy cart service
       template:
-        src: cart.servce.j2
+        src: cart.service.j2
         dest: /etc/systemd/system/cart.service
 
     - name: daemon reload
