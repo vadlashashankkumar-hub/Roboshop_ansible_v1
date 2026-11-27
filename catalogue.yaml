@@ -81,7 +81,7 @@
 
     - name: print the product_count
       debug:
-        msg: "{{ products_count_}}"
+        msg: "{{ products_count }}"
 
     - name: Load the data
       shell: mongosh --host {{ mongodb_host }} </app/db/master-data.js
